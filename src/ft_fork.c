@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_link.c                                          :+:      :+:    :+:   */
+/*   ft_fork.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/24 03:15:23 by gbourgeo          #+#    #+#             */
-/*   Updated: 2016/05/26 12:24:52 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/09/08 14:42:45 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <sys/wait.h>
 #include "main.h"
-
-static char			*ft_ptsname(int fd)
-{
-	static char		name[128];
-
-	if (ioctl(fd, TIOCPTYGNAME, name) < 0)
-		return (NULL);
-	return (name);
-}
 
 static int			ft_open_fds(t_env *e, int *fd_m, int *fd_s)
 {
+	char		name[128];
+
+	name[0] = '\0';
 	*fd_m = open("/dev/ptmx", O_RDWR | O_NOCTTY);
 	if (*fd_m == -1)
 		return (ft_error(0, "failed to open: /dev/ptmx", e));
 	ioctl(*fd_m, TIOCPTYGRANT);
 	ioctl(*fd_m, TIOCPTYUNLK);
-	*fd_s = open(ft_ptsname(*fd_m), O_RDWR | O_NOCTTY);
+	ioctl(*fd_m, TIOCPTYGNAME, name);
+	*fd_s = open(name, O_RDWR | O_NOCTTY);
 	if (*fd_s == -1)
 		return (ft_error(0, "failed to open the slave tty", e));
 	return (0);

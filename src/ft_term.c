@@ -6,10 +6,11 @@
 /*   By: gbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/24 04:10:43 by gbourgeo          #+#    #+#             */
-/*   Updated: 2016/05/26 12:45:36 by gbourgeo         ###   ########.fr       */
+/*   Updated: 2020/09/08 14:37:16 by gbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <sys/ioctl.h>
 #include "main.h"
 
 int					ft_new_term_attr(t_env *e)
